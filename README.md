@@ -32,20 +32,21 @@ This is a basic multilayer app to be dockerized
     docker run -d -p 80:80 -e APP_PORT=80 -e MONGO_DATASOURCE_URL=mongodb://{mongo-db-address}:27017/course-goals --name goals-backend --rm goals-js-backend
     ```
 
-5. Move to the frontend application
+5. Build the image for frontend
     ```console
-    cd frontend/
+    docker build -t goals-js-frontend ./frontend
     ```
 
-6. Install dependencies
+6. Run the frontend 
     ```console
-    npm install
+    docker run -d -p 3000:3000 --rm --name goals-frontend goals-js-frontend
     ```
+    
+    :warning: Note that the react application for the frontend run on the browser, so in this case localhost refers to the host machine instead of the application container 
 
-7. Start frontend application
-    ```console
-    npm start
-    ```
-
-8. Now, you can visit your __localhost:3000__
+7. Now, you can visit your __localhost:3000__
 ![goals_frontend](assets/goals_frontend.png)
+
+    :triangular_flag_on_post: As mentioned in the previous step the application runs in the browser and tries to communicate with the backend on the browser's local host. In this case if you try to access from another machine you will get an error because the backend is on the localhost where the container is running.
+
+![goals_frontend_outside_access](assets/goals_frontend_outside_access.png)
