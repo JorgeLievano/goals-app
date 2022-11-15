@@ -1,0 +1,27 @@
+version: '3.1'
+
+services:
+
+  mongo-db:
+    image: mongo:6.0.2
+    container_name: mongo-db
+    restart: always
+
+  goals-backend:
+    build: ./backend
+    image: goals-js-backend
+    container_name: goals-backend
+    environment:
+      - MONGO_DATASOURCE_URL=mongodb://mongo-db:27017/course-goals
+      - APP_PORT=80
+    ports:
+      - "80:80"
+    depends_on:
+      - mongo-db
+
+  goals-frontend:
+    build: ./frontend
+    image: goals-js-frontend
+    container_name: goals-frontend
+    ports:
+      - "3000:3000"
