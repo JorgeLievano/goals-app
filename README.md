@@ -1,8 +1,30 @@
 # Goals App
-This is a basic multilayer app to be dockerized
+Basic web application to manage your goals.
 
----
-## How to run
+Application components:
+- Database: Mongo database to store the data.
+- Backend: A node and express application that expose endpoints to create goals and connect with the database.
+- Frontend: A react application that exposes a simple UI on the web browser.
+
+# How to run
+
+## __Using Docker compose__
+
+Deploy all the components in one single command using `docker-compose`
+
+1. Starting the services
+    ```console
+    docker-compose up --build
+    ```
+    :memo: Use the `--build` flag to build the images from the dockerfiles before starting containers. You can omit it if you have already built the images.
+
+2. Now, you can visit your __localhost:3000__
+
+    ![goals_frontend](assets/goals_frontend.png)
+
+## __Using Docker__
+
+Configure and deploy each component using `docker`
 
 1. Create and run a container with the mongo db
     ```console
@@ -40,13 +62,17 @@ This is a basic multilayer app to be dockerized
 6. Run the frontend 
     ```console
     docker run -d -p 3000:3000 --rm --name goals-frontend goals-js-frontend
-    ```
-    
-    :warning: Note that the react application for the frontend run on the browser, so in this case localhost refers to the host machine instead of the application container 
+    ``` 
 
 7. Now, you can visit your __localhost:3000__
-![goals_frontend](assets/goals_frontend.png)
 
-    :triangular_flag_on_post: As mentioned in the previous step the application runs in the browser and tries to communicate with the backend on the browser's local host. In this case if you try to access from another machine you will get an error because the backend is on the localhost where the container is running.
+    ![goals_frontend](assets/goals_frontend.png)
+    
+
+# Notes
+
+:warning: Note that the react application for the frontend run on the browser, so in this case localhost refers to the host machine where the browser is running instead of the application container.
+
+:triangular_flag_on_post: As mentioned in the previous point the application runs in the browser and tries to communicate with the backend on the browser's local host. In this case if you try to access from another machine you will get an error because the backend is on the localhost where the container is running.
 
 ![goals_frontend_outside_access](assets/goals_frontend_outside_access.png)
