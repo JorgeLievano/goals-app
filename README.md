@@ -22,6 +22,12 @@ Deploy all the components in one single command using `docker-compose`
 
     ![goals_frontend](assets/goals_frontend.png)
 
+
+:stop_sign: Run the following command to stop the services
+```console
+docker-compose down -v
+```
+
 ## __Using Docker__
 
 Configure and deploy each component using `docker`
@@ -68,6 +74,10 @@ Configure and deploy each component using `docker`
 
     ![goals_frontend](assets/goals_frontend.png)
     
+:stop_sign: Run the following command to stop the services
+```console
+docker stop mongo-db goals-js-backend goals-js-frontend 
+```
 
 # Notes
 
