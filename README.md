@@ -76,7 +76,7 @@ Configure and deploy each component using `docker`
     
 :stop_sign: Run the following command to stop the services
 ```console
-docker stop mongo-db goals-js-backend goals-js-frontend 
+docker stop mongo-db goals-backend goals-frontend 
 ```
 
 # Notes
