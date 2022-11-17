@@ -8,17 +8,24 @@ Application components:
 
 # How to run
 
+Run this application in a development environment on your local machine.
+
 ## __Using Docker compose__
 
-Deploy all the components in one single command using `docker-compose`
+Deploy all the components using `docker-compose`
 
-1. Starting the services
+1. Create a named volume for data persistence (Just the first time). This is needed to avoid losing data every time the application is stopped.
     ```console
-    docker-compose up --build
+    docker volume create goals-db-data
+    ```
+
+2. Starting the services
+    ```console
+    docker-compose up -d --build
     ```
     :memo: Use the `--build` flag to build the images from the dockerfiles before starting containers. You can omit it if you have already built the images.
 
-2. Now, you can visit your __localhost:3000__
+3. Now, you can visit your __localhost:3000__
 
     ![goals_frontend](assets/goals_frontend.png)
 
@@ -28,21 +35,36 @@ Deploy all the components in one single command using `docker-compose`
 docker-compose down -v
 ```
 
+:stop_sign: Once you don't need the goals data anymore you can remove the volume
+```console
+docker volume rm goals-db-data 
+```
+
 ## __Using Docker__
 
 Configure and deploy each component using `docker`
 
-1. Create and run a container with the mongo db
-    ```console
-    docker run -d --name mongo-db --rm mongo
-    ```
+__Create Images__
 
-2. Build the image for the backend application
+The first time you want to run the application or whenever you make changes to the components you will need to build the images.
+
+1. Build the image for the backend application
     ```console
     docker build -t goals-js-backend ./backend
     ```
+2. Build the image for frontend
+    ```console
+    docker build -t goals-js-frontend ./frontend
+    ```
+__Start the containers__
 
-3. Look for the db IP address
+3. Create and run a container with the mongo db
+    ```console
+    docker run -d -v goals-db-data:/data/db --name mongo-db --rm mongo
+    ```
+    :memo: use `-v` to bind mount a volume for the data. Creates the volume if not exists.
+
+4. Look for the db IP address
     ```console
     docker inspect mongo-db | grep -e IPAddress
     ```
@@ -52,17 +74,12 @@ Configure and deploy each component using `docker`
     
     Copy the __IPAddress__
 
-4. Run the backend application
+5. Run the backend application
 
     Use the container __IPAddress__ copied in the previous step instead of `{mongo-db-address}` in the following command:
 
     ```console
     docker run -d -p 80:80 -e APP_PORT=80 -e MONGO_DATASOURCE_URL=mongodb://{mongo-db-address}:27017/course-goals --name goals-backend --rm goals-js-backend
-    ```
-
-5. Build the image for frontend
-    ```console
-    docker build -t goals-js-frontend ./frontend
     ```
 
 6. Run the frontend 
@@ -77,6 +94,11 @@ Configure and deploy each component using `docker`
 :stop_sign: Run the following command to stop the services
 ```console
 docker stop mongo-db goals-backend goals-frontend 
+```
+
+:stop_sign: Once you don't need the goals data anymore you can remove the volume
+```console
+docker volume rm goals-db-data 
 ```
 
 # Notes
